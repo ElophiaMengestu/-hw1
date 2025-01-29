@@ -89,27 +89,25 @@ INSERT INTO actors (name) VALUES
 INSERT INTO roles (movie_id, actor_id, character_name)
 VALUES 
 ((SELECT movie_id FROM movies WHERE title = 'Batman Begins'), (SELECT actor_id FROM actors WHERE name = 'Christian Bale'), 'Bruce Wayne / Batman'),
-((SELECT movie_id FROM movies WHERE title = 'Batman Begins'), (SELECT actor_id FROM actors WHERE name = 'Gary Oldman'), 'Jim Gordon'),
 ((SELECT movie_id FROM movies WHERE title = 'Batman Begins'), (SELECT actor_id FROM actors WHERE name = 'Michael Caine'), 'Alfred Pennyworth'),
+((SELECT movie_id FROM movies WHERE title = 'Batman Begins'), (SELECT actor_id FROM actors WHERE name = 'Liam Neeson'), 'Ras Al Ghul'),
+((SELECT movie_id FROM movies WHERE title = 'Batman Begins'), (SELECT actor_id FROM actors WHERE name = 'Gary Oldman'), 'Jim Gordon'),
 
 ((SELECT movie_id FROM movies WHERE title = 'The Dark Knight'), (SELECT actor_id FROM actors WHERE name = 'Christian Bale'), 'Bruce Wayne / Batman'),
 ((SELECT movie_id FROM movies WHERE title = 'The Dark Knight'), (SELECT actor_id FROM actors WHERE name = 'Heath Ledger'), 'Joker'),
-((SELECT movie_id FROM movies WHERE title = 'The Dark Knight'), (SELECT actor_id FROM actors WHERE name = 'Gary Oldman'), 'Jim Gordon'),
+((SELECT movie_id FROM movies WHERE title = 'The Dark Knight'), (SELECT actor_id FROM actors WHERE name = 'Aaron Eckhart'), 'Harvey Dent'),
 ((SELECT movie_id FROM movies WHERE title = 'The Dark Knight'), (SELECT actor_id FROM actors WHERE name = 'Michael Caine'), 'Alfred Pennyworth'),
 
 ((SELECT movie_id FROM movies WHERE title = 'The Dark Knight Rises'), (SELECT actor_id FROM actors WHERE name = 'Christian Bale'), 'Bruce Wayne / Batman'),
-((SELECT movie_id FROM movies WHERE title = 'The Dark Knight Rises'), (SELECT actor_id FROM actors WHERE name = 'Tom Hardy'), 'Bane'),
 ((SELECT movie_id FROM movies WHERE title = 'The Dark Knight Rises'), (SELECT actor_id FROM actors WHERE name = 'Gary Oldman'), 'Jim Gordon'),
-((SELECT movie_id FROM movies WHERE title = 'The Dark Knight Rises'), (SELECT actor_id FROM actors WHERE name = 'Michael Caine'), 'Alfred Pennyworth');
+((SELECT movie_id FROM movies WHERE title = 'The Dark Knight Rises'), (SELECT actor_id FROM actors WHERE name = 'Tom Hardy'), 'Bane'),
+((SELECT movie_id FROM movies WHERE title = 'The Dark Knight Rises'), (SELECT actor_id FROM actors WHERE name = 'Joseph Gordon-Levitt'), 'John Blake'),
+((SELECT movie_id FROM movies WHERE title = 'The Dark Knight Rises'), (SELECT actor_id FROM actors WHERE name = 'Anne Hathaway'), 'Selina Kyle');
 
 SELECT m.title, m.year_released, m.mpaa_rating, s.name AS studio
 FROM movies m
 JOIN studios s ON m.studio_id = s.studio_id;
 
-SELECT m.title, m.year_released 
-FROM movies m
-JOIN studios s ON m.studio_id = s.studio_id
-WHERE s.name = 'Warner Bros.';
 
 SELECT m.title, a.name AS actor, r.character_name
 FROM roles r
