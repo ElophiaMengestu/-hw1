@@ -38,6 +38,91 @@
 -- - Selection of data, so that something similar to the sample "report"
 --   below can be achieved.
 
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS actors;
+DROP TABLE IF EXISTS movies;
+DROP TABLE IF EXISTS studios;
+
+CREATE TABLE studios (
+    studio_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT
+);
+
+CREATE TABLE movies (
+    movie_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    year_released INTEGER,
+    mpaa_rating TEXT,
+    studio_id INTEGER,
+    FOREIGN KEY (studio_id) REFERENCES studios(studio_id)
+);
+
+CREATE TABLE actors (
+    actor_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT
+);
+
+CREATE TABLE roles (
+    role_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    movie_id INTEGER,
+    actor_id INTEGER,
+    character_name TEXT,
+    FOREIGN KEY (movie_id) REFERENCES movies(movie_id),
+    FOREIGN KEY (actor_id) REFERENCES actors(actor_id)
+);
+
+Insert INTO studios (name) VALUES ('Warner Bros.');
+
+INSERT INTO movies (title, year_released, mpaa_rating, studio_id)
+VALUES 
+('Batman Begins', 2005, 'PG-13', (SELECT studio_id FROM studios WHERE name = 'Warner Bros.')),
+('The Dark Knight', 2008, 'PG-13', (SELECT studio_id FROM studios WHERE name = 'Warner Bros.')),
+('The Dark Knight Rises', 2012, 'PG-13', (SELECT studio_id FROM studios WHERE name = 'Warner Bros.'));
+
+INSERT INTO actors (name) VALUES 
+('Christian Bale'),
+('Heath Ledger'),
+('Tom Hardy'),
+('Gary Oldman'),
+('Michael Caine');
+
+INSERT INTO roles (movie_id, actor_id, character_name)
+VALUES 
+((SELECT movie_id FROM movies WHERE title = 'Batman Begins'), (SELECT actor_id FROM actors WHERE name = 'Christian Bale'), 'Bruce Wayne / Batman'),
+((SELECT movie_id FROM movies WHERE title = 'Batman Begins'), (SELECT actor_id FROM actors WHERE name = 'Gary Oldman'), 'Jim Gordon'),
+((SELECT movie_id FROM movies WHERE title = 'Batman Begins'), (SELECT actor_id FROM actors WHERE name = 'Michael Caine'), 'Alfred Pennyworth'),
+
+((SELECT movie_id FROM movies WHERE title = 'The Dark Knight'), (SELECT actor_id FROM actors WHERE name = 'Christian Bale'), 'Bruce Wayne / Batman'),
+((SELECT movie_id FROM movies WHERE title = 'The Dark Knight'), (SELECT actor_id FROM actors WHERE name = 'Heath Ledger'), 'Joker'),
+((SELECT movie_id FROM movies WHERE title = 'The Dark Knight'), (SELECT actor_id FROM actors WHERE name = 'Gary Oldman'), 'Jim Gordon'),
+((SELECT movie_id FROM movies WHERE title = 'The Dark Knight'), (SELECT actor_id FROM actors WHERE name = 'Michael Caine'), 'Alfred Pennyworth'),
+
+((SELECT movie_id FROM movies WHERE title = 'The Dark Knight Rises'), (SELECT actor_id FROM actors WHERE name = 'Christian Bale'), 'Bruce Wayne / Batman'),
+((SELECT movie_id FROM movies WHERE title = 'The Dark Knight Rises'), (SELECT actor_id FROM actors WHERE name = 'Tom Hardy'), 'Bane'),
+((SELECT movie_id FROM movies WHERE title = 'The Dark Knight Rises'), (SELECT actor_id FROM actors WHERE name = 'Gary Oldman'), 'Jim Gordon'),
+((SELECT movie_id FROM movies WHERE title = 'The Dark Knight Rises'), (SELECT actor_id FROM actors WHERE name = 'Michael Caine'), 'Alfred Pennyworth');
+
+SELECT m.title, m.year_released, m.mpaa_rating, s.name AS studio
+FROM movies m
+JOIN studios s ON m.studio_id = s.studio_id;
+
+SELECT m.title, m.year_released 
+FROM movies m
+JOIN studios s ON m.studio_id = s.studio_id
+WHERE s.name = 'Warner Bros.';
+
+SELECT m.title, a.name AS actor, r.character_name
+FROM roles r
+JOIN movies m ON r.movie_id = m.movie_id
+JOIN actors a ON r.actor_id = a.actor_id
+ORDER BY m.title;
+
+SELECT m.title, r.character_name
+FROM roles r
+JOIN movies m ON r.movie_id = m.movie_id
+JOIN actors a ON r.actor_id = a.actor_id
+WHERE a.name = 'Christian Bale';
+
 -- Rubric
 --
 -- 1. Domain model - 6 points
